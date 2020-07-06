@@ -66,7 +66,7 @@ public class GetAllSensorReadingsRunner {
      * @param args
      */
     public static void main(String[] args) {
-        HashMap<Integer, SensorRecord> recMap = new HashMap<>();
+        HashMap<Integer, SensorRec> recMap = new HashMap<>();
         GetAllSensorReadingsRunner runner = new GetAllSensorReadingsRunner();
         try {
             // Change default timeout value
@@ -81,7 +81,7 @@ public class GetAllSensorReadingsRunner {
         }
     }
 
-    public void doRun(Map<Integer, SensorRecord> recMap) throws Exception {
+    public void doRun(Map<Integer, SensorRec> recMap) throws Exception {
         // Id 0 indicates first record in SDR. Next IDs can be retrieved from
         // records - they are organized in a list and there is no BMC command to
         // get all of them.
@@ -125,11 +125,15 @@ public class GetAllSensorReadingsRunner {
                     FullSensorRecord fsr = (FullSensorRecord) record;
                     recordReadingId = TypeConverter.byteToInt(fsr.getSensorNumber());
                     System.out.println("fsr - " + fsr.getName());
+
+                    recMap.put(recordReadingId, sr);
                     sr.setName(fsr.getName());
                 } else if (record instanceof CompactSensorRecord) {
                     CompactSensorRecord csr = (CompactSensorRecord) record;
                     recordReadingId = TypeConverter.byteToInt(csr.getSensorNumber());
                     System.out.println("csr - " + csr.getName());
+
+                    recMap.put(recordReadingId, sr);
                     sr.setName(csr.getName());
                 }
 
