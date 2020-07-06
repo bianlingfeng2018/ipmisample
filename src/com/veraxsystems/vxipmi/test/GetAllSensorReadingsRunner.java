@@ -1,9 +1,7 @@
 package com.veraxsystems.vxipmi.test;
 
 import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.veraxsystems.vxipmi.api.async.ConnectionHandle;
 import com.veraxsystems.vxipmi.api.sync.IpmiConnector;
@@ -73,8 +71,21 @@ public class GetAllSensorReadingsRunner {
             PropertiesManager.getInstance().setProperty("timeout", "2500");
             runner.doRun(recMap);
 
+//            for (Integer integer : recMap.keySet()) {
+//                System.out.println("id - " + integer + ", rc - " + recMap.get(integer));
+//            }
+            ArrayList<Integer> integers = new ArrayList<>();
             for (Integer integer : recMap.keySet()) {
-                System.out.println("id - " + integer + ", rc - " + recMap.get(integer));
+                integers.add(integer);
+            }
+            integers.sort(new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o1.compareTo(o2);
+                }
+            });
+            for (Integer integer : integers) {
+                System.out.printf("id - " + integer + ", " + recMap.get(integer).toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
