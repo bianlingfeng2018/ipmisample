@@ -13,6 +13,20 @@ public class SensorRec {
     this.rate = rate;
   }
 
+  public SensorRec() {
+
+  }
+
+  @Override
+  public String toString() {
+    return "SensorRec{" +
+            "name='" + name + '\'' +
+            ", value='" + value + '\'' +
+            ", unit='" + unit + '\'' +
+            ", rate='" + rate + '\'' +
+            '}';
+  }
+
   public String getName() {
     return name;
   }

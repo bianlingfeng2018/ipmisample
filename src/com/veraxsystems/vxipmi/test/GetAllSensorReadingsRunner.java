@@ -72,6 +72,10 @@ public class GetAllSensorReadingsRunner {
             // Change default timeout value
             PropertiesManager.getInstance().setProperty("timeout", "2500");
             runner.doRun(recMap);
+
+            for (Integer integer : recMap.keySet()) {
+                System.out.println("id - " + integer + ", rc - " + recMap.get(integer));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,6 +109,7 @@ public class GetAllSensorReadingsRunner {
         while (nextRecId < MAX_REPO_RECORD_ID) {
 
             SensorRecord record = null;
+            SensorRec sr = new SensorRec();
 
             try {
                 // Populate the sensor record and get ID of the next record in
@@ -120,10 +125,12 @@ public class GetAllSensorReadingsRunner {
                     FullSensorRecord fsr = (FullSensorRecord) record;
                     recordReadingId = TypeConverter.byteToInt(fsr.getSensorNumber());
                     System.out.println("fsr - " + fsr.getName());
+                    sr.setName(fsr.getName());
                 } else if (record instanceof CompactSensorRecord) {
                     CompactSensorRecord csr = (CompactSensorRecord) record;
                     recordReadingId = TypeConverter.byteToInt(csr.getSensorNumber());
                     System.out.println("csr - " + csr.getName());
+                    sr.setName(csr.getName());
                 }
 
                 // If our record has got a reading associated, we get request
@@ -142,8 +149,9 @@ public class GetAllSensorReadingsRunner {
                             System.out.println(data2.getSensorReading(rec) + " " + rec.getSensorBaseUnit().toString()
                                     + (rec.getRateUnit() != RateUnit.None ? " per " + rec.getRateUnit() : ""));
 
-                            recMap.put(recordReadingId, new SensorRec(fsr.getName(), fsr))
-
+                            sr.setValue(data2.getSensorReading(rec) + "");
+                            sr.setUnit(rec.getSensorBaseUnit().toString());
+                            sr.setRate(rec.getRateUnit() != RateUnit.None ? " per " + rec.getRateUnit() : "");
                         }
                         if (record instanceof CompactSensorRecord) {
                             CompactSensorRecord rec = (CompactSensorRecord) record;
@@ -156,6 +164,7 @@ public class GetAllSensorReadingsRunner {
                             }
                             System.out.println(s);
 
+                            sr.setValue(s.toString());
                         }
 
                     }
